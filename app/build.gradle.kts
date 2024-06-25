@@ -132,4 +132,9 @@ dependencies {
     //Accompanist Library
     implementation ("com.google.accompanist:accompanist-permissions:0.34.0")
 
+    //Livedata
+    implementation ("androidx.compose.runtime:runtime-livedata:1.3.3")
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
+    implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
+
 }

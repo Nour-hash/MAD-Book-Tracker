@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.booktrackerapp.viewModel.DetailViewModel
+import com.example.booktrackerapp.viewModel.LibraryViewModel
 import com.example.booktrackerapp.widgets.BookDetails
 import com.example.booktrackerapp.widgets.BookRowSimple
 import com.example.booktrackerapp.widgets.ReadStatusButton
@@ -27,7 +28,8 @@ import com.example.booktrackerapp.widgets.SimpleTopAppBar
 fun DetailScreen(
     navController: NavController,
     isbn: String,
-    viewModel: DetailViewModel = hiltViewModel()
+    viewModel: DetailViewModel = hiltViewModel(),
+    libraryViewModel: LibraryViewModel = hiltViewModel()
 ) {
     val bookDetailState = viewModel.bookDetailState
     val errorState = viewModel.errorState
@@ -54,11 +56,11 @@ fun DetailScreen(
                 Text(text = errorState.value ?: "", color = MaterialTheme.colorScheme.error)
             } else {
                 bookDetailState.value?.let { book ->
-                    BookRowSimple(book = book, navController = navController, isClickable = false)
+                    BookRowSimple(book = book, navController = navController, isClickable = false, libraryViewModel = libraryViewModel)
                     Spacer(modifier = Modifier.height(8.dp))
-                    BookDetails(Modifier,book = book)
-                    Spacer(modifier = Modifier.height(8.dp))
-                    ReadStatusButton(isRead = isRead, onClick = { viewModel.toggleReadStatus() })
+                    BookDetails(Modifier,book = book, isRead = isRead, onReadClick = { viewModel.toggleReadStatus() } )
+                    /*Spacer(modifier = Modifier.height(8.dp))
+                    ReadStatusButton(isRead = isRead, onClick = { viewModel.toggleReadStatus() })*/
                 }
             }
         }

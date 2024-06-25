@@ -7,7 +7,8 @@ data class BookResponse(
 
 //Repräsentiert ein einzelnes Buch
 data class BookItem(
-    val volumeInfo: VolumeInfo
+    val volumeInfo: VolumeInfo,
+    var isFavorite: Boolean = false
 )
 
 // Detaillierte Informationen über ein Buch.

@@ -2,6 +2,7 @@ package com.example.booktrackerapp.navigation
 
 import PreviewScreen
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -10,7 +11,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.booktrackerapp.model.service.ImageUri
 import com.example.booktrackerapp.screens.CameraScreen
 import androidx.navigation.navArgument
-import com.example.booktrackerapp.screens.CameraScreen
 import com.example.booktrackerapp.screens.DetailScreen
 import com.example.booktrackerapp.screens.HomeScreen
 import com.example.booktrackerapp.screens.LibraryScreen
@@ -20,14 +20,15 @@ import com.example.booktrackerapp.screens.SplashScreen
 import com.example.booktrackerapp.screens.Userscreen
 import com.example.booktrackerapp.viewModel.CameraViewModel
 import com.example.booktrackerapp.viewModel.HomeViewModel
-import com.example.booktrackerapp.screens.CameraScreen
+import com.example.booktrackerapp.viewModel.LibraryViewModel
 
 // Verwaltet alle Navigationspfade.
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
-    val viewModel: HomeViewModel = viewModel()
-    val cameraViewModel: CameraViewModel = viewModel()
+    val homeViewModel: HomeViewModel = hiltViewModel()
+    val cameraViewModel: CameraViewModel = hiltViewModel()
+    val libraryViewModel: LibraryViewModel = hiltViewModel()
     val imageUriHolder = ImageUri()
 
     // Definiert den Navigations-Host, der als Kontainer für die Navigationsscreens dient.
@@ -37,14 +38,14 @@ fun Navigation() {
     ) {
         // Definiert verschiedene Routen und die zugehörigen Composables für die Navigation.
         composable(Screen.HomeScreen.route) {
-            HomeScreen(navController = navController,viewModel )
+            HomeScreen(navController = navController, viewModel = homeViewModel, libraryViewModel = libraryViewModel )
         }
         composable(Screen.LibraryScreen.route) {
-            LibraryScreen(navController = navController,viewModel)
+            LibraryScreen(navController = navController, libraryViewModel = libraryViewModel)
         }
         composable(Screen.UserScreen.route)
         {
-            Userscreen(navController = navController,viewModel)
+            Userscreen(navController = navController, viewModel = homeViewModel)
         }
 
         composable(Screen.SignInScreen.route) {

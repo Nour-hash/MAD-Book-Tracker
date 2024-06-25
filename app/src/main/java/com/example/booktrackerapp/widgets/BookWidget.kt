@@ -40,11 +40,12 @@ import androidx.navigation.NavController
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.example.booktrackerapp.api.BookItem
+import com.example.booktrackerapp.viewModel.LibraryViewModel
 
 //Darstellung eines Buches mit Titel, Cover,Favoriten-Icon und Author
 @Composable
-fun BookRowSimple(book: BookItem, navController: NavController, isClickable: Boolean = true) {
-    var isFavorite by remember { mutableStateOf(false) }
+fun BookRowSimple(book: BookItem, navController: NavController, libraryViewModel: LibraryViewModel, isClickable: Boolean = true) {
+    var isFavorite by remember { mutableStateOf(book.isFavorite) }
 
     Card(
         modifier = Modifier
@@ -63,7 +64,15 @@ fun BookRowSimple(book: BookItem, navController: NavController, isClickable: Boo
             BookCardHeader(
                 imageUrl = book.volumeInfo.imageLinks?.thumbnail ?: "",
                 isFavorite = isFavorite,
-                onFavoriteClick = { isFavorite = !isFavorite }
+                onFavoriteClick = {
+                    isFavorite = !isFavorite
+                    book.isFavorite = isFavorite
+                    if (isFavorite) {
+                        libraryViewModel.addFavoriteBook(book)
+                    } else {
+                        libraryViewModel.removeFavoriteBook(book)
+                    }
+                }
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text("Authors: ${book.volumeInfo.authors.joinToString(", ")}", style = MaterialTheme.typography.bodySmall)
@@ -118,7 +127,7 @@ fun FavoriteIcon(isFavorite: Boolean, onFavoriteClick: () -> Unit) {
 
 // Detaillierte Ansicht eines Buches
 @Composable
-fun BookDetails(modifier: Modifier, book: BookItem) {
+fun BookDetails(modifier: Modifier, book: BookItem, isRead: Boolean ,onReadClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -163,6 +172,8 @@ fun BookDetails(modifier: Modifier, book: BookItem) {
                     DetailText(label = "Description:", content = it)
                     Spacer(modifier = Modifier.height(16.dp)) // Optional: Für Abstand am Ende
                 }
+
+                ReadStatusButton(isRead = isRead, onClick = onReadClick)
             }
         }
     }
